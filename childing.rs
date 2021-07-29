@@ -38,7 +38,7 @@ fn main() {
     pc.start().unwrap();
     eprintln!("pc started");
     // Unblock the child.
-    writer.write(&[1]).unwrap();
+    writer.write_all(&[1]).unwrap();
     drop(writer);
     // Wait for the parent.
     eprintln!("waiting for parent");
