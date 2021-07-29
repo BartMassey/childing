@@ -4,7 +4,7 @@ use std::process::Command;
 
 use libc::{c_int, fork, waitpid};
 use os_pipe::pipe;
-use perfcnt::{*, linux::*};
+use perfcnt::{linux::*, *};
 
 fn main() {
     // Make a pipe for unblocking the child later.
@@ -32,8 +32,8 @@ fn main() {
     // I have no idea how to do this.
     let mut pc: PerfCounter =
         PerfCounterBuilderLinux::from_hardware_event(HardwareEventType::CacheMisses)
-        .finish()
-        .unwrap();
+            .finish()
+            .unwrap();
     // Start the child perf counter now.
     pc.start().unwrap();
     eprintln!("pc started");
@@ -43,11 +43,7 @@ fn main() {
     // Wait for the parent.
     eprintln!("waiting for parent");
     let mut status: c_int = 0;
-    let result = unsafe { waitpid(
-        pid,
-        (&mut status) as *mut c_int,
-        0,
-    )};
+    let result = unsafe { waitpid(pid, (&mut status) as *mut c_int, 0) };
     assert_eq!(result, pid);
     assert_eq!(status, 0);
     // Stop the perf counter and return the answer.
